@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration & Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #toggle-form {
+            text-align: center;
+            margin-top: 10px;
+        }
+        #toggle-form a {
+            color: #007bff;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2 id="form-title">Login</h2>
+            <form id="auth-form">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div id="register-fields" class="hidden">
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password">
+                    </div>
+                </div>
+                <button type="submit" id="submit-btn">Login</button>
+                <p id="toggle-form">Don't have an account? <a href="#">Register</a></p>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const formTitle = document.getElementById("form-title");
+            const authForm = document.getElementById("auth-form");
+            const registerFields = document.getElementById("register-fields");
+            const submitBtn = document.getElementById("submit-btn");
+            const toggleForm = document.getElementById("toggle-form");
+            let isRegistering = false;
+
+            toggleForm.addEventListener("click", (e) => {
+                e.preventDefault();
+                isRegistering = !isRegistering;
+                formTitle.textContent = isRegistering ? "Register" : "Login";
+                submitBtn.textContent = isRegistering ? "Register" : "Login";
+                registerFields.classList.toggle("hidden");
+                toggleForm.innerHTML = isRegistering ? "Already have an account? <a href='#'>Login</a>" : "Don't have an account? <a href='#'>Register</a>";
+            });
+
+            authForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value.trim();
+                const confirmPassword = document.getElementById("confirm-password")?.value.trim();
+                
+                if (!email || !password || (isRegistering && !confirmPassword)) {
+                    alert("Please fill in all fields.");
+                    return;
+                }
+
+                if (isRegistering && password !== confirmPassword) {
+                    alert("Passwords do not match.");
+                    return;
+                }
+
+                if (!isRegistering && email === "admin" && password === "admin") {
+                    alert("Admin login successful!");
+                    window.location.href = "home.html";
+                    return;
+                }
+                
+                alert(isRegistering ? "Registered successfully!" : "Logged in successfully!");
+                window.location.href = "home.html";
+            });
+        });
+    </script>
+</body>
+</html>
